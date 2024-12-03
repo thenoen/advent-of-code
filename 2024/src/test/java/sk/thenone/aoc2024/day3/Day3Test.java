@@ -23,14 +23,14 @@ public class Day3Test {
 		System.out.println("result: " + result);
 		Assertions.assertEquals(196826776, result);
 	}
-//
-//	@Test
-//	void part2Sample() {
-//		SolutionPart2 solution = new SolutionPart2();
-//		long result = solution.solvePart2("day3/sample.txt");
-//		System.out.println("result: " + result);
-//		Assertions.assertEquals(4, result);
-//	}
+
+	@Test
+	void part2Sample() {
+		SolutionPart2 solution = new SolutionPart2();
+		long result = solution.solvePart2("day3/samplePart2.txt");
+		System.out.println("result: " + result);
+		Assertions.assertEquals(48, result);
+	}
 //
 //	@Test
 //	void part2() {
