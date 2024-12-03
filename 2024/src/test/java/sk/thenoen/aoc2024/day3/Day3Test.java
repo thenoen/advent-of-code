@@ -1,10 +1,7 @@
-package sk.thenone.aoc2024.day3;
+package sk.thenoen.aoc2024.day3;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-
-import sk.thenoen.aoc2024.day3.SolutionPart1;
-import sk.thenoen.aoc2024.day3.SolutionPart2;
 
 public class Day3Test {
 
@@ -31,13 +28,13 @@ public class Day3Test {
 		System.out.println("result: " + result);
 		Assertions.assertEquals(48, result);
 	}
-//
-//	@Test
-//	void part2() {
-//		SolutionPart2 solution = new SolutionPart2();
-//		long result = solution.solvePart2("day3/input.txt");
-//		System.out.println("result: " + result);
-//		Assertions.assertEquals(665, result);
-//	}
+
+	@Test
+	void part2() {
+		SolutionPart2 solution = new SolutionPart2();
+		long result = solution.solvePart2("day3/input.txt");
+		System.out.println("result: " + result);
+		Assertions.assertEquals(106780429, result);
+	}
 
 }

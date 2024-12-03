@@ -1,9 +1,7 @@
-package sk.thenone.aoc2024.day1;
+package sk.thenoen.aoc2024.day1;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-
-import sk.thenoen.aoc2024.day1.Solution;
 
 public class Day1Test {
 
