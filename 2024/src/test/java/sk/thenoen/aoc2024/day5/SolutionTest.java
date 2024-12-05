@@ -20,4 +20,20 @@ class SolutionTest {
 		System.out.println("result: " + result);
 		Assertions.assertEquals(5991, result);
 	}
+
+	@Test
+	void solvePart2Sample() {
+		final SolutionPart2 solution = new SolutionPart2();
+		long result = solution.solve("day5/sample.txt");
+		System.out.println("result: " + result);
+		Assertions.assertEquals(123, result);
+	}
+
+	@Test
+	void solvePart2() {
+		final SolutionPart2 solution = new SolutionPart2();
+		long result = solution.solve("day5/input.txt");
+		System.out.println("result: " + result);
+		Assertions.assertEquals(5479, result);
+	}
 }
