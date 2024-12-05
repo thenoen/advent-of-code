@@ -29,28 +29,27 @@ public class Day4Test {
 		Assertions.assertEquals(2336, result);
 	}
 
-//	@Test
-//	void part1() {
-//		sk.thenoen.aoc2024.day3.SolutionPart1 solutionPart1 = new SolutionPart1();
-//		long result = solutionPart1.solvePart1("day3/input.txt");
-//		System.out.println("result: " + result);
-//		Assertions.assertEquals(196826776, result);
-//	}
-//
-//	@Test
-//	void part2Sample() {
-//		sk.thenoen.aoc2024.day3.SolutionPart2 solution = new sk.thenoen.aoc2024.day3.SolutionPart2();
-//		long result = solution.solvePart2("day3/samplePart2.txt");
-//		System.out.println("result: " + result);
-//		Assertions.assertEquals(48, result);
-//	}
-//
-//	@Test
-//	void part2() {
-//		sk.thenoen.aoc2024.day3.SolutionPart2 solution = new SolutionPart2();
-//		long result = solution.solvePart2("day3/input.txt");
-//		System.out.println("result: " + result);
-//		Assertions.assertEquals(106780429, result);
-//	}
+	@Test
+	void part2TestSample() {
+		SolutionPart2 solutionPart2 = new SolutionPart2();
+		long result = solutionPart2.solvePart2("day4/test-sample-part2.txt");
+		System.out.println("result: " + result);
+		Assertions.assertEquals(9, result);
+	}
 
+	@Test
+	void part2Sample() {
+		SolutionPart2 solutionPart2 = new SolutionPart2();
+		long result = solutionPart2.solvePart2("day4/sample.txt");
+		System.out.println("result: " + result);
+		Assertions.assertEquals(9, result);
+	}
+
+	@Test
+	void part2() {
+		SolutionPart2 solutionPart2 = new SolutionPart2();
+		long result = solutionPart2.solvePart2("day4/input.txt");
+		System.out.println("result: " + result);
+		Assertions.assertEquals(1831, result);
+	}
 }

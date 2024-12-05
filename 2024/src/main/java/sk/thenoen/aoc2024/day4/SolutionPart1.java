@@ -50,8 +50,6 @@ public class SolutionPart1 {
 				.filter(word -> word.equals(WORD))
 				.count();
 
-//		return -1;
-
 	}
 
 	private List<String> findWords(char[][] puzzle, int x, int y) {
