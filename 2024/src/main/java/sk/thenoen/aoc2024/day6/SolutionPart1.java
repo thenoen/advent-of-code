@@ -6,7 +6,7 @@ import java.util.function.Function;
 
 import sk.thenoen.aoc.Utils;
 
-public class Solution {
+public class SolutionPart1 {
 
 	public long solve(String inputPath) throws InterruptedException {
 		final ArrayList<String> lines = Utils.loadLines(inputPath);
