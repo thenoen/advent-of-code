@@ -34,7 +34,7 @@ class SolutionTest {
 		final SolutionPart2 solution = new SolutionPart2();
 		long result = solution.solve("day6/input.txt");
 		System.out.println("result: " + result);
-		Assertions.assertTrue(result > 421, "too low: " + result);
+		Assertions.assertTrue(result > 722, "too low: " + result);
 //		Assertions.assertEquals(0, result);
 	}
 }
