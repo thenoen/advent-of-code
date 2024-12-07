@@ -30,10 +30,19 @@ class SolutionTest {
 	}
 
 	@Test
+	void solvePart2MySample() throws InterruptedException {
+		final SolutionPart2 solution = new SolutionPart2();
+		long result = solution.solve("day6/my_sample.txt");
+		System.out.println("result: " + result);
+		Assertions.assertEquals(3, result);
+	}
+
+	@Test
 	void solvePart2() throws InterruptedException {
 		final SolutionPart2 solution = new SolutionPart2();
 		long result = solution.solve("day6/input.txt");
 		System.out.println("result: " + result);
+		Assertions.assertNotEquals(672, result);
 		Assertions.assertTrue(result > 722, "too low: " + result);
 //		Assertions.assertEquals(0, result);
 	}
