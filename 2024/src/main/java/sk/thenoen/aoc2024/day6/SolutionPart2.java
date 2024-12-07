@@ -1,6 +1,5 @@
 package sk.thenoen.aoc2024.day6;
 
-import java.awt.print.PrinterAbortException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -15,9 +14,12 @@ public class SolutionPart2 {
 		final ArrayList<String> lines = Utils.loadLines(inputPath);
 
 		char[][] map = new char[lines.size()][lines.getFirst().length()];
+		List<List<List<Direction>>> directionMap = new ArrayList<>(lines.size());
 
 		for (int x = 0; x < map.length; x++) {
+			directionMap.add(new ArrayList<>(lines.get(x).length()));
 			for (int y = 0; y < map[0].length; y++) {
+				directionMap.get(x).add(new ArrayList<>());
 				map[x][y] = lines.get(x).charAt(y);
 			}
 		}
@@ -49,7 +51,7 @@ public class SolutionPart2 {
 		List<Position> obstacles = new ArrayList<>();
 
 		do {
-			nextStep = new Position(currentDirection.xDirection.apply(currentStep.x), currentDirection.yDirection.apply(currentStep.y));
+			nextStep = nextStep(currentDirection, currentStep);
 
 			if (!isInsideMap(nextStep, map)) {
 				break;
@@ -59,73 +61,44 @@ public class SolutionPart2 {
 				currentDirection = directionOrder.get((currentDirection.index + 1) % 4);
 				turnPositions.add(currentStep);
 				map[currentStep.x][currentStep.y] = '+';
+				directionMap.get(currentStep.x).get(currentStep.y).add(currentDirection);
 			} else {
 				map[nextStep.x][nextStep.y] = 'o';
 				currentStep = nextStep;
+				directionMap.get(currentStep.x).get(currentStep.y).add(currentDirection);
 			}
 
-			if (turnPositions.size() > 2) {
-				if (currentDirection == Direction.LEFT) {
-					Position a = turnPositions.get(turnPositions.size() - 3);
-					Position b = turnPositions.get(turnPositions.size() - 2);
-					Position c = turnPositions.get(turnPositions.size() - 1);
+			/////////// TEST OBSTACLE ///////////
+			Position potentialObstacle = nextStep(currentDirection, currentStep);
+			if (!isInsideMap(potentialObstacle, map)) {
+				break;
+			}
+//			char bak = map[potentialObstacle.x][potentialObstacle.y];
+//			map[potentialObstacle.x][potentialObstacle.y] = '■';
+//			printMap(map);
+//			map[potentialObstacle.x][potentialObstacle.y] = bak;
+			/// EXPLORE
 
-					Position obstacle = new Position(currentDirection.xDirection.apply(c.x), currentDirection.yDirection.apply(a.y));
-					boolean isObstacleInBetween = isObstacleInBetween(currentDirection, currentStep, obstacle, map);
-
-					if (a.x == b.x && b.y == c.y && map[obstacle.x][obstacle.y] == '.' && !isObstacleInBetween) {
-						obstacles.add(obstacle);
-						printObstacle(map, obstacle);
-					}
+			final Direction testDirection = directionOrder.get((currentDirection.index + 1) % 4);
+			Position testStep = nextStep(testDirection, currentStep);
+			while (isInsideMap(testStep, map) && map[testStep.x][testStep.y] != '#') {
+				if (directionMap.get(testStep.x).get(testStep.y).contains(testDirection)) {
+					obstacles.add(potentialObstacle);
+					break;
 				}
-
-				if (currentDirection == Direction.UP) {
-					Position a = turnPositions.get(turnPositions.size() - 3);
-					Position b = turnPositions.get(turnPositions.size() - 2);
-					Position c = turnPositions.get(turnPositions.size() - 1);
-
-					Position obstacle = new Position(currentDirection.xDirection.apply(a.x), currentDirection.yDirection.apply(c.y));
-					boolean isObstacleInBetween = isObstacleInBetween(currentDirection, currentStep, obstacle, map);
-
-					if (a.y == b.y && b.x == c.x && map[obstacle.x][obstacle.y] == '.' && !isObstacleInBetween) {
-						obstacles.add(obstacle);
-						printObstacle(map, obstacle);
-					}
-				}
-
-				if (currentDirection == Direction.RIGHT) {
-					Position a = turnPositions.get(turnPositions.size() - 3);
-					Position b = turnPositions.get(turnPositions.size() - 2);
-					Position c = turnPositions.get(turnPositions.size() - 1);
-
-					Position obstacle = new Position(currentDirection.xDirection.apply(c.x), currentDirection.yDirection.apply(a.y));
-					boolean isObstacleInBetween = isObstacleInBetween(currentDirection, currentStep, obstacle, map);
-
-					if (a.x == b.x && b.y == c.y && map[obstacle.x][obstacle.y] == '.' && !isObstacleInBetween) {
-						obstacles.add(obstacle);
-						printObstacle(map, obstacle);
-					}
-				}
-
-				if (currentDirection == Direction.DOWN) {
-					Position a = turnPositions.get(turnPositions.size() - 3);
-					Position b = turnPositions.get(turnPositions.size() - 2);
-					Position c = turnPositions.get(turnPositions.size() - 1);
-
-					Position obstacle = new Position(currentDirection.xDirection.apply(a.x), currentDirection.yDirection.apply(c.y));
-					boolean isObstacleInBetween = isObstacleInBetween(currentDirection, currentStep, obstacle, map);
-
-					if (a.y == b.y && b.x == c.x && map[obstacle.x][obstacle.y] == '.' && !isObstacleInBetween) {
-						obstacles.add(obstacle);
-						printObstacle(map, obstacle);
-					}
-				}
+				testStep = nextStep(testDirection, testStep);
 			}
 
-			printMap(map);
-			Thread.sleep(200);
+//			printMap(map);
+//			printMap(directionMap);
+//			Thread.sleep(100);
 
 		} while (isInsideMap(nextStep, map));
+
+
+
+		printMap(map);
+		printMap(directionMap);
 
 		final HashSet<Position> uniqueObstacles = new HashSet<>(obstacles);
 		uniqueObstacles.forEach(obstacle -> map[obstacle.x][obstacle.y] = '■');
@@ -134,15 +107,18 @@ public class SolutionPart2 {
 		return uniqueObstacles.size();
 	}
 
+	private static Position nextStep(Direction currentDirection, Position currentStep) {
+		return new Position(currentDirection.xDirection.apply(currentStep.x),
+							currentDirection.yDirection.apply(currentStep.y));
+	}
+
 	private static boolean isObstacleInBetween(Direction currentDirection, Position currentStep, Position obstacle, char[][] map) {
-		Position tmp = new Position(currentDirection.xDirection.apply(currentStep.x),
-									currentDirection.yDirection.apply(currentStep.y));
+		Position tmp = nextStep(currentDirection, currentStep);
 		while (!obstacle.equals(tmp) && (tmp.x < map.length && tmp.y < map[0].length)) {
-			if(map[tmp.x][tmp.y] == '#') {
+			if (map[tmp.x][tmp.y] == '#') {
 				return true;
 			}
-			tmp = new Position(currentDirection.xDirection.apply(tmp.x),
-							   currentDirection.yDirection.apply(tmp.y));
+			tmp = nextStep(currentDirection, tmp);
 		}
 		return false;
 	}
@@ -150,7 +126,7 @@ public class SolutionPart2 {
 	private static void printObstacle(char[][] map, Position obstacle) throws InterruptedException {
 		map[obstacle.x][obstacle.y] = '■';
 		printMap(map);
-//		Thread.sleep(300);
+//		Thread.sleep(100);
 		map[obstacle.x][obstacle.y] = '.';
 		printMap(map);
 	}
@@ -170,20 +146,41 @@ public class SolutionPart2 {
 		System.out.println("\n\n");
 	}
 
+	private static void printMap(List<List<List<Direction>>> puzzle) {
+		for (int x = 0; x < puzzle.size(); x++) {
+			for (int y = 0; y < puzzle.get(0).size(); y++) {
+				//				System.out.print(puzzle.get(x).get(y).size());
+				if (puzzle.get(x).get(y).size() == 0) {
+					System.out.print(".");
+				}
+				if (puzzle.get(x).get(y).size() == 1) {
+					System.out.print(puzzle.get(x).get(y).get(0).symbol);
+				}
+				if (puzzle.get(x).get(y).size() > 1) {
+					System.out.print("+");
+				}
+			}
+			System.out.println();
+		}
+		System.out.println("\n\n");
+	}
+
 	private enum Direction {
-		UP(0, x -> x - 1, y -> y),
-		RIGHT(1, x -> x, y -> y + 1),
-		DOWN(2, x -> x + 1, y -> y),
-		LEFT(3, x -> x, y -> y - 1);
+		UP(0, x -> x - 1, y -> y, '|'),
+		RIGHT(1, x -> x, y -> y + 1, '-'),
+		DOWN(2, x -> x + 1, y -> y, '|'),
+		LEFT(3, x -> x, y -> y - 1, '-');
 
 		int index;
 		private Function<Integer, Integer> xDirection;
 		private Function<Integer, Integer> yDirection;
+		char symbol;
 
-		Direction(int index, Function<Integer, Integer> xDirection, Function<Integer, Integer> yDirection) {
+		Direction(int index, Function<Integer, Integer> xDirection, Function<Integer, Integer> yDirection, char symbol) {
 			this.index = index;
 			this.xDirection = xDirection;
 			this.yDirection = yDirection;
+			this.symbol = symbol;
 		}
 	}
 

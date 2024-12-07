@@ -1,10 +1,7 @@
-package sk.thenoen.aoc2024.day6.day6;
+package sk.thenoen.aoc2024.day6;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-
-import sk.thenoen.aoc2024.day6.SolutionPart1;
-import sk.thenoen.aoc2024.day6.SolutionPart2;
 
 class SolutionTest {
 
@@ -31,12 +28,13 @@ class SolutionTest {
 		System.out.println("result: " + result);
 		Assertions.assertEquals(6, result);
 	}
-//
-//	@Test
-//	void solvePart2() {
-//		final SolutionPart2 solution = new SolutionPart2();
-//		long result = solution.solve("day6/input.txt");
-//		System.out.println("result: " + result);
-//		Assertions.assertEquals(5479, result);
-//	}
+
+	@Test
+	void solvePart2() throws InterruptedException {
+		final SolutionPart2 solution = new SolutionPart2();
+		long result = solution.solve("day6/input.txt");
+		System.out.println("result: " + result);
+		Assertions.assertTrue(result > 421, "too low: " + result);
+//		Assertions.assertEquals(0, result);
+	}
 }
