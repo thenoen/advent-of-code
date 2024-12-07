@@ -8,7 +8,7 @@ import java.util.function.BiFunction;
 
 import sk.thenoen.aoc.Utils;
 
-public class Solution {
+public class SolutionPart2 {
 
 	public long solve(String inputPath) {
 		final ArrayList<String> lines = Utils.loadLines(inputPath);
@@ -85,7 +85,12 @@ public class Solution {
 
 	private enum Operator {
 		ADD((a, b) -> a + b),
-		MULTIPLY((a, b) -> a * b);
+		MULTIPLY((a, b) -> a * b),
+		CONCAT((a, b) -> {
+			String aStr = a.toString();
+			String bStr = b.toString();
+			return Long.parseLong(aStr + bStr);
+		});
 
 		private BiFunction<Long, Long, Long> operation;
 
