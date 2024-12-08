@@ -65,12 +65,10 @@ public class SolutionPart2 {
 				turnPositions.add(currentStep);
 				map[currentStep.x][currentStep.y] = '+';
 				directionMap.get(currentStep.x).get(currentStep.y).add(currentDirection);
-				rotationDuringPreviousStep = true;
 			} else {
 				map[nextStep.x][nextStep.y] = 'o';
 				currentStep = nextStep;
 				directionMap.get(currentStep.x).get(currentStep.y).add(currentDirection);
-				rotationDuringPreviousStep = false;
 			}
 
 			/////////// TEST OBSTACLE ///////////
@@ -83,9 +81,6 @@ public class SolutionPart2 {
 //			printMap(map);
 			map[potentialObstacle.x][potentialObstacle.y] = bak;
 			/// EXPLORE
-//			if (rotationDuringPreviousStep) {
-//				continue;
-//			}
 
 			final Direction testDirection = directionOrder.get((currentDirection.index + 1) % 4);
 			Position testStep = nextStep(testDirection, currentStep);
