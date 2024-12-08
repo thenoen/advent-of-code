@@ -83,9 +83,9 @@ public class SolutionPart2 {
 //			printMap(map);
 			map[potentialObstacle.x][potentialObstacle.y] = bak;
 			/// EXPLORE
-			if (rotationDuringPreviousStep) {
-				continue;
-			}
+//			if (rotationDuringPreviousStep) {
+//				continue;
+//			}
 
 			final Direction testDirection = directionOrder.get((currentDirection.index + 1) % 4);
 			Position testStep = nextStep(testDirection, currentStep);
@@ -117,8 +117,8 @@ public class SolutionPart2 {
 
 		} while (isInsideMap(nextStep, map));
 
-//		printMap(map);
-//		printMap(directionMap);
+		printMap(map);
+		printMap(directionMap);
 
 		final HashSet<Position> uniqueObstacles = new HashSet<>(obstacles);
 		uniqueObstacles.forEach(obstacle -> map[obstacle.x][obstacle.y] = '■');

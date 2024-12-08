@@ -34,7 +34,7 @@ class SolutionTest {
 		final SolutionPart2 solution = new SolutionPart2();
 		long result = solution.solve("day6/my_sample.txt");
 		System.out.println("result: " + result);
-		Assertions.assertEquals(3, result);
+		Assertions.assertEquals(4, result);
 	}
 
 	@Test
@@ -43,6 +43,7 @@ class SolutionTest {
 		long result = solution.solve("day6/input.txt");
 		System.out.println("result: " + result);
 		Assertions.assertNotEquals(672, result);
+		Assertions.assertNotEquals(682, result);
 		Assertions.assertTrue(result > 722, "too low: " + result);
 //		Assertions.assertEquals(0, result);
 	}
