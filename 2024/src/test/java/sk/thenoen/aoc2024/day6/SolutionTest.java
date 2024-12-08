@@ -38,6 +38,22 @@ class SolutionTest {
 	}
 
 	@Test
+	void solvePart2MySample2() throws InterruptedException {
+		final SolutionPart2 solution = new SolutionPart2();
+		long result = solution.solve("day6/my_sample2.txt");
+		System.out.println("result: " + result);
+		Assertions.assertEquals(3, result);
+	}
+
+	@Test
+	void solvePart2MySample3() throws InterruptedException {
+		final SolutionPart2 solution = new SolutionPart2();
+		long result = solution.solve("day6/my_sample3.txt");
+		System.out.println("result: " + result);
+		Assertions.assertEquals(3, result);
+	}
+
+	@Test
 	void solvePart2() throws InterruptedException {
 		final SolutionPart2 solution = new SolutionPart2();
 		long result = solution.solve("day6/input.txt");
@@ -45,6 +61,7 @@ class SolutionTest {
 		Assertions.assertNotEquals(672, result);
 		Assertions.assertNotEquals(682, result);
 		Assertions.assertTrue(result > 722, "too low: " + result);
-//		Assertions.assertEquals(0, result);
+		Assertions.assertNotEquals(900, result);
+		//		Assertions.assertEquals(0, result);
 	}
 }

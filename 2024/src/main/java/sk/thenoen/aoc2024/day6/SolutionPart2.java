@@ -6,7 +6,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.function.Function;
 
-import com.sun.management.DiagnosticCommandMBean;
 import sk.thenoen.aoc.Utils;
 
 public class SolutionPart2 {
@@ -76,15 +75,34 @@ public class SolutionPart2 {
 			if (!isInsideMap(potentialObstacle, map)) {
 				break;
 			}
-			char bak = map[potentialObstacle.x][potentialObstacle.y];
-			map[potentialObstacle.x][potentialObstacle.y] = '■';
-//			printMap(map);
-			map[potentialObstacle.x][potentialObstacle.y] = bak;
+			printSpecialPosition(map, potentialObstacle, '■');
 			/// EXPLORE
 
 			final Direction testDirection = directionOrder.get((currentDirection.index + 1) % 4);
 			Position testStep = nextStep(testDirection, currentStep);
 			while (isInsideMap(testStep, map)) {
+
+				printSpecialPosition(map, testStep, '?');
+
+				//				 first step after potential obstacle turn is obstacle => 180 degree turn
+				if (map[testStep.x][testStep.y] == '#') {
+					/// EXPLORE 180 DEGREE TURN - find next 180 degree turn
+					Direction next180Direction = directionOrder.get((testDirection.index + 1) % 4);
+					Position next180Step = nextStep(next180Direction, testStep);
+					do {
+						if (map[next180Step.x][next180Step.y] == '#') {
+							Direction next180Direction2 = directionOrder.get((next180Direction.index + 1) % 4);
+							Position next180Step2 = nextStep(next180Direction2, next180Step);
+							if (map[next180Step2.x][next180Step2.y] == '#') {
+								obstacles.add(potentialObstacle);
+								break;
+							}
+						}
+						next180Step = nextStep(next180Direction, next180Step);
+					} while (isInsideMap(next180Step, map) && map[next180Step.x][next180Step.y] != '#');
+
+					break;
+				}
 
 				if (directionMap.get(testStep.x).get(testStep.y).contains(testDirection)) {
 					obstacles.add(potentialObstacle);
@@ -92,8 +110,8 @@ public class SolutionPart2 {
 				} else {
 					Position oneMoreStep = nextStep(testDirection, testStep);
 					if (isInsideMap(oneMoreStep, map) && map[oneMoreStep.x][oneMoreStep.y] == '#') {
-//						printMap(map);
-//						printMap(directionMap);
+						//						printMap(map);
+						//						printMap(directionMap);
 						final Direction nextRotation = directionOrder.get((testDirection.index + 1) % 4);
 						if (directionMap.get(testStep.x).get(testStep.y).contains(nextRotation)) {
 							obstacles.add(potentialObstacle);
@@ -105,8 +123,8 @@ public class SolutionPart2 {
 				testStep = nextStep(testDirection, testStep);
 			}
 
-//			printMap(map);
-//			printMap(directionMap);
+			//			printMap(map);
+			//			printMap(directionMap);
 			//			Thread.sleep(100);
 			System.out.println("---------------------------");
 
@@ -120,6 +138,14 @@ public class SolutionPart2 {
 		printMap(map);
 
 		return uniqueObstacles.size();
+	}
+
+	private static char printSpecialPosition(char[][] map, Position potentialObstacle, char c) {
+		char bak1 = map[potentialObstacle.x][potentialObstacle.y];
+		map[potentialObstacle.x][potentialObstacle.y] = c;
+//		printMap(map);
+		map[potentialObstacle.x][potentialObstacle.y] = bak1;
+		return bak1;
 	}
 
 	private static Position nextStep(Direction currentDirection, Position currentStep) {
@@ -158,7 +184,7 @@ public class SolutionPart2 {
 			}
 			System.out.println();
 		}
-		System.out.println("\n");
+		System.out.println();
 	}
 
 	private static void printMap(List<List<List<Direction>>> puzzle) {
