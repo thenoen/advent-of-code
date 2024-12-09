@@ -38,20 +38,21 @@ class SolutionTest {
 
 	/////////// PART 2 ///////////
 
-	//	@Test
-	//	void solvePart2Sample() {
-	//		SolutionPart2 solution = new SolutionPart2();
-	//		long result = solution.solve("day8/sample.txt");
-	//		System.out.println("result: " + result);
-	//		assertEquals(34, result);
-	//	}
+		@Test
+		void solvePart2Sample() {
+			SolutionPart2 solution = new SolutionPart2();
+			BigDecimal result = solution.solve("day9/sample.txt");
+			System.out.println("result: " + result);
+			assertEquals(BigDecimal.valueOf(2858), result);
+		}
 
-	//	@Test
-	//	void solvePart2() {
-	//		SolutionPart2 solution = new SolutionPart2();
-	//		long result = solution.solve("day8/input.txt");
-	//		System.out.println("result: " + result);
-	//		assertEquals(1134, result);
-	//	}
+		@Test
+		void solvePart2() {
+			SolutionPart2 solution = new SolutionPart2();
+			BigDecimal result = solution.solve("day9/input.txt");
+			System.out.println("result: " + result);
+			assertTrue(new BigDecimal("6654658055781").compareTo(result) > 0, "too high: " + result);
+			assertTrue(new BigDecimal("6408966547049").compareTo(result) == 0, "incorrect result");
+		}
 
 }
