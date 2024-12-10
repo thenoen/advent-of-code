@@ -46,5 +46,16 @@ class SolutionTest {
 		assertEquals(468, result);
 	}
 
+	///////// PART 2 ////////////
+
+
+
+	@Test
+	void solvePart2() {
+		SolutionPart2 solution = new SolutionPart2();
+		int result = solution.solve("day10/input.txt");
+		System.out.println("result: " + result);
+		assertEquals(966, result);
+	}
 
 }
