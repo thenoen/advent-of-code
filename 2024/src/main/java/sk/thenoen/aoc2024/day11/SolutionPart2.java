@@ -11,12 +11,56 @@ import sk.thenoen.aoc.Utils;
 
 public class SolutionPart2 {
 
-	public int solve(String inputPath, int blinkCount) {
+	private final static List<Rule> rules = buildRules();
+
+	public int solveInLoop(String inputPath, int blinkCount) {
 		final ArrayList<String> lines = Utils.loadLines(inputPath);
 
 		List<String> stones = new ArrayList<>(Arrays.asList(lines.get(0).split(" ")));
-		System.out.println(stones);
 
+		stones = solveInLoop(blinkCount, stones, rules);
+
+		return stones.size();
+	}
+
+	public long solveRecursively(String inputPath, int maxBblinkCount) {
+		final ArrayList<String> lines = Utils.loadLines(inputPath);
+
+		List<String> stones = new ArrayList<>(Arrays.asList(lines.get(0).split(" ")));
+		long count = 0;
+
+		for (String stone : stones) {
+			count += expandStone(stone, 0, maxBblinkCount);
+		}
+
+		return count;
+	}
+
+	private long expandStone(String stone, int blinkNr, int maxBlinkCount) {
+		if (blinkNr == maxBlinkCount) {
+//			System.out.print(stone + " ");
+			return 1;
+		}
+		long count = 0;
+		boolean wasRuleApplied = false;
+		for (Rule rule : rules) {
+			if (rule.isApplicable(stone)) {
+				wasRuleApplied = true;
+				List<String> generatedStones = rule.apply(stone);
+//				System.out.println(stone + " => " + generatedStones + "(" + blinkNr + ")");
+				for (String generatedStone : generatedStones) {
+					count += expandStone(generatedStone, blinkNr + 1, maxBlinkCount);
+				}
+				break;
+			}
+		}
+		if (!wasRuleApplied) {
+			count = 1;
+		}
+		return count;
+	}
+
+	private static List<Rule> buildRules() {
 		List<Rule> rules = new ArrayList<>();
 		rules.add(new Rule(s -> s.equals("0"), s -> List.of("1")));
 		rules.add(new Rule(s -> s.length() % 2 == 0, s -> {
@@ -24,7 +68,10 @@ public class SolutionPart2 {
 			return List.of(s.substring(0, half), String.valueOf(Integer.parseInt(s.substring(half))));
 		}));
 		rules.add(new Rule(s -> true, s -> List.of(String.valueOf(Long.parseLong(s) * 2024L))));
+		return rules;
+	}
 
+	private static List<String> solveInLoop(int blinkCount, List<String> stones, List<Rule> rules) {
 		LocalTime start = LocalTime.now();
 
 		for (int i = 1; i <= blinkCount; i++) {
@@ -46,14 +93,13 @@ public class SolutionPart2 {
 				}
 			}
 			stones = newStones;
-//			System.out.println(stones);
+			//			System.out.println(stones);
 			System.out.println(Duration.between(start, LocalTime.now()).withNanos(0) + " : " + i + " => " + stones.size());
 		}
-
-		return stones.size();
+		return stones;
 	}
 
-	private class Rule {
+	private static class Rule {
 
 		private Function<String, Boolean> condition;
 		private Function<String, List<String>> operation;

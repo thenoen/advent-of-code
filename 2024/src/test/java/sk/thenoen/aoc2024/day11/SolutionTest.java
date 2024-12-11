@@ -28,7 +28,7 @@ class SolutionTest {
 	@Test
 	void solvePart2Sample() {
 		SolutionPart2 solution = new SolutionPart2();
-		long result = solution.solve("day11/sample.txt", 25);
+		long result = solution.solveInLoop("day11/sample.txt", 25);
 		System.out.println("result: " + result);
 		assertEquals(55312, result);
 	}
@@ -36,7 +36,31 @@ class SolutionTest {
 	@Test
 	void solvePart2() {
 		SolutionPart2 solution = new SolutionPart2();
-		long result = solution.solve("day11/input.txt", 75);
+		long result = solution.solveInLoop("day11/input.txt", 75);
+		System.out.println("result: " + result);
+		assertEquals(0, result);
+	}
+
+	@Test
+	void solvePart2Sample1Recursively() {
+		SolutionPart2 solution = new SolutionPart2();
+		long result = solution.solveRecursively("day11/sample.txt", 6);
+		System.out.println("result: " + result);
+		assertEquals(22, result);
+	}
+
+	@Test
+	void solvePart2SampleRecursively() {
+		SolutionPart2 solution = new SolutionPart2();
+		long result = solution.solveRecursively("day11/sample.txt", 25);
+		System.out.println("result: " + result);
+		assertEquals(55312, result);
+	}
+
+	@Test
+	void solvePart2Recursively() {
+		SolutionPart2 solution = new SolutionPart2();
+		long result = solution.solveRecursively("day11/input.txt", 75);
 		System.out.println("result: " + result);
 		assertEquals(0, result);
 	}
