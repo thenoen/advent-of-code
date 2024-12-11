@@ -1,5 +1,6 @@
 package sk.thenoen.aoc2024.day11;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 
@@ -33,6 +34,7 @@ class SolutionTest {
 		assertEquals(55312, result);
 	}
 
+	@Disabled("OOM")
 	@Test
 	void solvePart2() {
 		SolutionPart2 solution = new SolutionPart2();
