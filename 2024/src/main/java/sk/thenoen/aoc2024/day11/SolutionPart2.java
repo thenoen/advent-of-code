@@ -4,7 +4,9 @@ import java.time.Duration;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
 
 import sk.thenoen.aoc.Utils;
@@ -28,19 +30,26 @@ public class SolutionPart2 {
 
 		List<String> stones = new ArrayList<>(Arrays.asList(lines.get(0).split(" ")));
 		long count = 0;
+		Map<String, Map<Integer, Long>> cache = new HashMap<>();
 
 		for (String stone : stones) {
-			count += expandStone(stone, 0, maxBblinkCount);
+			count += expandStone(stone, 0, maxBblinkCount, cache);
 		}
 
 		return count;
 	}
 
-	private long expandStone(String stone, int blinkNr, int maxBlinkCount) {
+	private long expandStone(String stone, int blinkNr, int maxBlinkCount, Map<String, Map<Integer, Long>> cache) {
 		if (blinkNr == maxBlinkCount) {
 //			System.out.print(stone + " ");
 			return 1;
 		}
+
+		if (cache.containsKey(stone) && cache.get(stone).containsKey(blinkNr)) {
+			System.out.println("cache hit: " + stone + " (" + blinkNr + ")");
+			return cache.get(stone).get(blinkNr);
+		}
+
 		long count = 0;
 		boolean wasRuleApplied = false;
 		for (Rule rule : rules) {
@@ -49,7 +58,7 @@ public class SolutionPart2 {
 				List<String> generatedStones = rule.apply(stone);
 //				System.out.println(stone + " => " + generatedStones + "(" + blinkNr + ")");
 				for (String generatedStone : generatedStones) {
-					count += expandStone(generatedStone, blinkNr + 1, maxBlinkCount);
+					count += expandStone(generatedStone, blinkNr + 1, maxBlinkCount, cache);
 				}
 				break;
 			}
@@ -57,6 +66,10 @@ public class SolutionPart2 {
 		if (!wasRuleApplied) {
 			count = 1;
 		}
+
+		cache.putIfAbsent(stone, new HashMap<>());
+		cache.get(stone).put(blinkNr, count);
+		System.out.println("cached:" + stone + " (" + blinkNr + ") => " + count);
 		return count;
 	}
 

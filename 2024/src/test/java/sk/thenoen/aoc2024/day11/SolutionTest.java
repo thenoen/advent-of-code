@@ -64,7 +64,7 @@ class SolutionTest {
 		SolutionPart2 solution = new SolutionPart2();
 		long result = solution.solveRecursively("day11/input.txt", 75);
 		System.out.println("result: " + result);
-		assertEquals(0, result);
+		assertEquals(220377651399268L, result);
 	}
 
 
