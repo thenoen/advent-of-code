@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class SolutionPart1Test {
+class SolutionTest {
 
 	@Test
 	void solvePart1Sample() {
@@ -23,9 +23,19 @@ class SolutionPart1Test {
 		assertEquals(183620, result);
 	}
 
+	/////////////// PART 2 ////////////////
+
+	@Test
+	void solvePart2Sample() {
+		SolutionPart2 solution = new SolutionPart2();
+		long result = solution.solve("day11/sample.txt", 25);
+		System.out.println("result: " + result);
+		assertEquals(55312, result);
+	}
+
 	@Test
 	void solvePart2() {
-		SolutionPart1 solution = new SolutionPart1();
+		SolutionPart2 solution = new SolutionPart2();
 		long result = solution.solve("day11/input.txt", 75);
 		System.out.println("result: " + result);
 		assertEquals(0, result);

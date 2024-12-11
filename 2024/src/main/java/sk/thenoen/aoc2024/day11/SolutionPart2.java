@@ -4,18 +4,17 @@ import java.time.Duration;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Function;
 
 import sk.thenoen.aoc.Utils;
 
-public class SolutionPart1 {
+public class SolutionPart2 {
 
 	public int solve(String inputPath, int blinkCount) {
 		final ArrayList<String> lines = Utils.loadLines(inputPath);
 
-		final List<String> stones = new ArrayList<>(Arrays.asList(lines.get(0).split(" ")));
+		List<String> stones = new ArrayList<>(Arrays.asList(lines.get(0).split(" ")));
 		System.out.println(stones);
 
 		List<Rule> rules = new ArrayList<>();
@@ -29,21 +28,24 @@ public class SolutionPart1 {
 		LocalTime start = LocalTime.now();
 
 		for (int i = 1; i <= blinkCount; i++) {
+			List<String> newStones = new ArrayList<>(stones.size() * 2);
 			for (int s = 0; s < stones.size(); s++) {
 
+				final String currentStone = stones.get(s);
+				boolean wasRuleApplied = false;
 				for (Rule rule : rules) {
-					final String currentStone = stones.get(s);
 					if (rule.isApplicable(currentStone)) {
-						List<String> newStones = rule.apply(currentStone);
-						stones.remove(s);
-						for (int newStoneIndex = 0; newStoneIndex < newStones.size(); newStoneIndex++) {
-							stones.add(s + newStoneIndex, newStones.get(newStoneIndex));
-						}
-						s += newStones.size()-1;
+						List<String> generatedStones = rule.apply(currentStone);
+						newStones.addAll(generatedStones);
+						wasRuleApplied = true;
 						break;
 					}
 				}
+				if (!wasRuleApplied) {
+					newStones.add(currentStone);
+				}
 			}
+			stones = newStones;
 //			System.out.println(stones);
 			System.out.println(Duration.between(start, LocalTime.now()).withNanos(0) + " : " + i + " => " + stones.size());
 		}
