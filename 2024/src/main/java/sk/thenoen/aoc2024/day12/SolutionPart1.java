@@ -49,10 +49,10 @@ public class SolutionPart1 {
 		for (Character plantType : plantTypes) {
 			final char[][] plots = initPlots(garden);
 			filterRegions(garden, plots, plantType);
-			//			System.out.println("plots:");
-			//			print(plots);
+			//			print("plots", plots);
 			totalPrice += calculatePrice(plots);
-			System.out.println("total price: " + totalPrice);;
+			//			System.out.println("total price: " + totalPrice);
+			;
 		}
 		return totalPrice;
 	}
@@ -102,7 +102,8 @@ public class SolutionPart1 {
 		for (Character plotType : plotTypes.keySet()) {
 			//			System.out.println("--------");
 			//			System.out.println("plotType: " + plotType);
-			final short[][] fences = findFences(plotType, plots);
+			final int[][] fences = findFences(plotType, plots);
+//			print("plots", plots);
 //			print("fences", fences);
 
 			long perimeter = 0;
@@ -113,16 +114,17 @@ public class SolutionPart1 {
 			}
 			final Integer area = plotTypes.get(plotType);
 			long price = area * perimeter;
-			//			System.out.println("perimeter: " + perimeter);
-			//			System.out.println("area: " + area);
+			System.out.println("perimeter: " + perimeter);
+			System.out.println("area: " + area);
+			System.out.println("price: " + price);
 			priceSum += price;
 		}
 
 		return priceSum;
 	}
 
-	private static short[][] findFences(char plotId, char[][] plots) {
-		final short[][] fences = initFences(plots);
+	private static int[][] findFences(char plotId, char[][] plots) {
+		final int[][] fences = initFences(plots);
 
 		for (int x = 0; x < plots.length; x++) {
 			for (int y = 0; y < plots[0].length; y++) {
@@ -148,8 +150,8 @@ public class SolutionPart1 {
 		return fences;
 	}
 
-	private static short[][] initFences(char[][] garden) {
-		short[][] fences = new short[garden.length][garden[0].length];
+	private static int[][] initFences(char[][] garden) {
+		int[][] fences = new int[garden.length][garden[0].length];
 
 		for (int x = 0; x < fences.length; x++) {
 			for (int y = 0; y < fences[0].length; y++) {
@@ -170,7 +172,7 @@ public class SolutionPart1 {
 		System.out.println();
 	}
 
-	private static void print(String title, short[][] plots) {
+	private static void print(String title, int[][] plots) {
 		System.out.println(title + ":");
 		for (int x = 0; x < plots.length; x++) {
 			for (int y = 0; y < plots[0].length; y++) {
@@ -192,23 +194,25 @@ public class SolutionPart1 {
 
 		//		print(plots);
 
-		char id = 'a';
+		char id = 91;
 		int count = 0;
 		for (int x = 0; x < plots.length; x++) {
 			for (int y = 0; y < plots[0].length; y++) {
 				if (plots[x][y] == plantType) {
+					System.out.println("PlantType: " + plantType + " -> " + id);
 					groupRegionInGarden(plots, x, y, plantType, id);
 					id++;
 					count++;
 				}
 			}
 		}
-		//		print(plots);
+//				print("plots", plots);
 		System.out.println("number of plots with type '" + plantType + "' : " + count);
+		System.out.println("-------------");
 	}
 
 	private void groupRegionInGarden(char[][] plots, int x, int y, char plantType, char id) {
-		//		print(plots);
+		//				print("plots", plots);
 		if (!isInsideMap(x, y, plots)) {
 			return;
 		}
@@ -229,20 +233,16 @@ public class SolutionPart1 {
 		groupRegionInGarden(plots, x, y - 1, plantType, id);
 		groupRegionInGarden(plots, x, y + 1, plantType, id);
 
-		groupRegionInGarden(plots, x - 1, y - 1, plantType, id);
-		groupRegionInGarden(plots, x - 1, y + 1, plantType, id);
-		groupRegionInGarden(plots, x + 1, y - 1, plantType, id);
-		groupRegionInGarden(plots, x + 1, y + 1, plantType, id);
+//		groupRegionInGarden(plots, x - 1, y - 1, plantType, id);
+//		groupRegionInGarden(plots, x - 1, y + 1, plantType, id);
+//		groupRegionInGarden(plots, x + 1, y - 1, plantType, id);
+//		groupRegionInGarden(plots, x + 1, y + 1, plantType, id);
 
 	}
 
 	private static boolean isInsideMap(int x, int y, char[][] map) {
 		return x > -1 && y > -1 &&
 			   x < map.length && y < map[0].length;
-	}
-
-	private record Plot(int x, int y) {
-
 	}
 
 }

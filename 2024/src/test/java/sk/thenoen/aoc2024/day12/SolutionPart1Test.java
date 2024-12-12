@@ -8,11 +8,35 @@ import static org.junit.jupiter.api.Assertions.*;
 class SolutionPart1Test {
 
 	@Test
-	void solvePart1MySample() {
+	void solvePart1MySample1() {
 		SolutionPart1 solution = new SolutionPart1();
-		long result = solution.solve("day12/mySample.txt", 'J');
+		long result = solution.solveAllPlantTypes("day12/mySample1.txt");
 		System.out.println("result: " + result);
-		assertEquals(40, result);
+		assertEquals(2788, result);
+	}
+
+	@Test
+	void solvePart1MySample2() {
+		SolutionPart1 solution = new SolutionPart1();
+		long result = solution.solveAllPlantTypes("day12/mySample2.txt");
+		System.out.println("result: " + result);
+		assertEquals(3*8+4*10, result);
+	}
+
+	@Test
+	void solvePart1MySample3() {
+		SolutionPart1 solution = new SolutionPart1();
+		long result = solution.solveAllPlantTypes("day12/mySample3.txt");
+		System.out.println("result: " + result);
+		assertEquals(8962, result);
+	}
+
+	@Test
+	void solvePart1MySample1PlotB() {
+		SolutionPart1 solution = new SolutionPart1();
+		long result = solution.solve("day12/mySample1.txt", 'B');
+		System.out.println("result: " + result);
+		assertEquals(16, result);
 	}
 
 	@Test
@@ -96,20 +120,10 @@ class SolutionPart1Test {
 	}
 
 	@Test
-	void solvePart1Plot_() {
-		SolutionPart1 solution = new SolutionPart1();
-		long result = solution.solve("day12/input.txt", 'J');
-		System.out.println("result: " + result);
-		assertEquals(0, result);
-	}
-
-	//	@Disabled
-	@Test
 	void solvePart1() {
 		SolutionPart1 solution = new SolutionPart1();
 		long result = solution.solveAllPlantTypes("day12/input.txt");
 		System.out.println("result: " + result);
-		assertTrue(result < 1379464L, "too high");
-		//		assertEquals(0, result);
+		assertEquals(1359028, result);
 	}
 }
