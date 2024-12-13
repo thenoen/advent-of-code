@@ -6,7 +6,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import sk.thenoen.aoc.Utils;
 
@@ -54,6 +53,7 @@ public class SolutionPart2 {
 			print("plots", plots);
 			totalPrice += calculatePrice(plots);
 			//			System.out.println("total price: " + totalPrice);
+			System.out.println("--------------------------------------------------------------------------");
 			;
 		}
 		return totalPrice;
@@ -103,7 +103,7 @@ public class SolutionPart2 {
 		long priceSum = 0;
 		for (Character plotType : plotTypes.keySet()) {
 			System.out.println("--------");
-			//			System.out.println("plotType: " + plotType);
+			System.out.println("plotType: " + plotType);
 			final int[][] fences = findFences(plotType, plots);
 			print("plots", plots);
 			print("fences", fences);
@@ -118,45 +118,54 @@ public class SolutionPart2 {
 			}
 
 			Fence start = fenceList.get(0);
-			int sideCount = followPlots(start, plots);
+			int sideCount = followFences(start, fences);
 
 			final Integer area = plotTypes.get(plotType);
-			long price = area * sideCount;
-			System.out.println("sideCount: " + sideCount);
-			System.out.println("area: " + area);
-			System.out.println("price: " + price);
-			priceSum += price;
+			//			long price = area * sideCount;
+			//			System.out.println("sideCount: " + sideCount);
+			//			System.out.println("area: " + area);
+			//			System.out.println("price: " + price);
+			//			priceSum += price;
 		}
 
 		return priceSum;
 	}
 
-	private static int followPlots(Fence start, char[][] plots) {
+	private static int followFences(Fence start, int[][] plots) {
 		int x = start.x;
 		int y = start.y;
 		int corners = 0;
 		do {
-			if (isInsideMap(x, y + 1, plots) && plots[x][y + 1] == '*') {
+			System.out.println(plots[x][y] + " ");
+			if (isInsideMap(x, y + 1, plots) && plots[x][y + 1] != 0) {
 				corners++;
-				while (plots[x][y + 1] == '*') {
+				System.out.println();
+				while (plots[x][y + 1] != 0) {
+					System.out.println(plots[x][y + 1] + " ");
 					y++;
 				}
 			}
-			if (isInsideMap(x + 1, y, plots) && plots[x + 1][y] == '*') {
+			if (isInsideMap(x + 1, y, plots) && plots[x + 1][y] != 0) {
 				corners++;
-				while (plots[x + 1][y] == '*') {
+//				System.out.println();
+				while (plots[x + 1][y] != 0) {
+					System.out.println(plots[x + 1][y] + " ");
 					x++;
 				}
 			}
-			if (isInsideMap(x, y - 1, plots) && plots[x][y - 1] == '*') {
+			if (isInsideMap(x, y - 1, plots) && plots[x][y - 1] != 0) {
 				corners++;
-				while (plots[x][y - 1] == '*') {
+//				System.out.println();
+				while (plots[x][y - 1] != 0) {
+					System.out.println(plots[x][y - 1] + " ");
 					y--;
 				}
 			}
-			if (isInsideMap(x - 1, y, plots) && plots[x - 1][y] == '*') {
+			if (isInsideMap(x - 1, y, plots) && plots[x - 1][y] != 0) {
 				corners++;
-				while (plots[x - 1][y] == '*') {
+//				System.out.println();
+				while (plots[x - 1][y] != 0) {
+					System.out.println(plots[x - 1][y] + " ");
 					x--;
 				}
 			}
@@ -173,37 +182,32 @@ public class SolutionPart2 {
 				//					continue;
 				//				}
 				if (plots[x][y] == plotId) {
-					if (plots[x - 1][y] == '*') {
-						fences[x - 1][y]++;
-//						fences[x - 1][y + 1]++;
-					}
-					if (plots[x + 1][y] == '*') {
+					if (plots[x + 1][y] != plotId) {
 						fences[x + 1][y]++;
-//						fences[x + 1][y - 1]++;
 					}
-					if (plots[x][y - 1] == '*') {
-						fences[x][y - 1]++;
-//						fences[x - 1][y - 1]++;
+					if (plots[x - 1][y] != plotId) {
+						fences[x - 1][y]++;
 					}
-					if (plots[x][y + 1] == '*') {
+					if (plots[x][y + 1] != plotId) {
 						fences[x][y + 1]++;
-//						fences[x + 1][y + 1]++;
+					}
+					if (plots[x][y - 1] != plotId) {
+						fences[x][y - 1]++;
+					}
+
+					if (plots[x + 1][y + 1] != plotId) {
+						fences[x + 1][y + 1]++;
+					}
+					if (plots[x + 1][y - 1] != plotId) {
+						fences[x + 1][y - 1]++;
+					}
+					if (plots[x - 1][y + 1] != plotId) {
+						fences[x - 1][y + 1]++;
+					}
+					if (plots[x - 1][y - 1] != plotId) {
+						fences[x - 1][y - 1]++;
 					}
 				}
-				//				if (plots[x][y] == plotId) {
-				//					if (plots[x - 1][y] == '*') {
-				//						fences[x - 1][y]++;
-				//					}
-				//					if (plots[x + 1][y] == '*') {
-				//						fences[x + 1][y]++;
-				//					}
-				//					if (plots[x][y - 1] == '*') {
-				//						fences[x][y - 1]++;
-				//					}
-				//					if (plots[x][y + 1] == '*') {
-				//						fences[x][y + 1]++;
-				//					}
-				//				}
 			}
 		}
 		return fences;
@@ -251,7 +255,7 @@ public class SolutionPart2 {
 			}
 		}
 
-		//		print(plots);
+		//		print("plots", plots);
 
 		char id = 'a';
 		int count = 0;
@@ -260,14 +264,15 @@ public class SolutionPart2 {
 				if (plots[x][y] == plantType) {
 					System.out.println("PlantType: " + plantType + " -> " + id);
 					groupRegionInGarden(plots, x, y, plantType, id);
+					//					print("plots", plots);
 					id++;
 					count++;
 				}
 			}
 		}
-		//				print("plots", plots);
+		//		print("plots", plots);
 		System.out.println("number of plots with type '" + plantType + "' : " + count);
-		System.out.println("-------------");
+		//		System.out.println("-------------");
 	}
 
 	private void groupRegionInGarden(char[][] plots, int x, int y, char plantType, char id) {
@@ -276,28 +281,17 @@ public class SolutionPart2 {
 			return;
 		}
 
-		if (plots[x][y] == id || plots[x][y] == '*') {
+		if (plots[x][y] == id || plots[x][y] == '.') {
 			return;
 		}
 
 		if (plots[x][y] == plantType) {
 			plots[x][y] = id;
-		} else {
-			plots[x][y] = '*';
-			//			if (plots[x][y + 1] == '.') {
-			//				plots[x][y + 1] = '*';
-			//			}
-			//			if (plots[x][y - 1] == '.') {
-			//				plots[x][y - 1] = '*';
-			//			}
-			//			if (plots[x + 1][y] == '.') {
-			//				plots[x + 1][y] = '*';
-			//			}
-			//			if (plots[x - 1][y] == '.') {
-			//				plots[x - 1][y] = '*';
-			//			}
-			return;
 		}
+		//		else {
+		//			plots[x][y] = '*';
+		//			return;
+		//		}
 
 		groupRegionInGarden(plots, x - 1, y, plantType, id);
 		groupRegionInGarden(plots, x + 1, y, plantType, id);
@@ -312,6 +306,11 @@ public class SolutionPart2 {
 	}
 
 	private static boolean isInsideMap(int x, int y, char[][] map) {
+		return x > -1 && y > -1 &&
+			   x < map.length && y < map[0].length;
+	}
+
+	private static boolean isInsideMap(int x, int y, int[][] map) {
 		return x > -1 && y > -1 &&
 			   x < map.length && y < map[0].length;
 	}
