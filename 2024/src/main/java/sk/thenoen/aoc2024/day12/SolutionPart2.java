@@ -1,11 +1,13 @@
 package sk.thenoen.aoc2024.day12;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import sk.thenoen.aoc.Utils;
 
@@ -104,34 +106,127 @@ public class SolutionPart2 {
 		for (Character plotType : plotTypes.keySet()) {
 			System.out.println("--------");
 			System.out.println("plotType: " + plotType);
-			final int[][] fences = findFences(plotType, plots);
+			final char[][] fences = findFences(plotType, plots);
 			print("plots", plots);
 			print("fences", fences);
 
-			List<Fence> fenceList = new ArrayList<>();
-			for (int x = 0; x < plots.length; x++) {
-				for (int y = 0; y < plots[0].length; y++) {
-					if (fences[x][y] != 0) {
-						fenceList.add(new Fence(x, y));
-					}
-				}
-			}
+			//			List<Fence> fenceList = new ArrayList<>();
+			//			for (int x = 0; x < plots.length; x++) {
+			//				for (int y = 0; y < plots[0].length; y++) {
+			//					if (fences[x][y] != 0) {
+			//						fenceList.add(new Fence(x, y));
+			//					}
+			//				}
+			//			}
 
-			Fence start = fenceList.get(0);
-			int sideCount = followFences(start, fences);
+			//			Fence start = fenceList.get(0);
+			//			int sideCount = followFences(start, fences);
+			int linesCount = countLines(plotType, plots, fences);
 
 			final Integer area = plotTypes.get(plotType);
-			//			long price = area * sideCount;
-			//			System.out.println("sideCount: " + sideCount);
-			//			System.out.println("area: " + area);
-			//			System.out.println("price: " + price);
-			//			priceSum += price;
+			long price = area * linesCount;
+			System.out.println("plotType: " + plotType);
+			System.out.println("area: " + area);
+			System.out.println("sideCount: " + linesCount);
+			System.out.println("price: " + price);
+			priceSum += price;
 		}
 
 		return priceSum;
 	}
 
-	private static int followFences(Fence start, int[][] plots) {
+	private static int countLines(Character plotType, char[][] plots, char[][] fences) {
+		List<Fence> fenceList = new ArrayList<>();
+		for (int x = 0; x < plots.length; x++) {
+			for (int y = 0; y < plots[0].length; y++) {
+				if (fences[x][y] == '#') {
+					fenceList.add(new Fence(x, y));
+				}
+			}
+		}
+
+		/////////////// VERTICAL ////////////////////
+
+		Map<Integer, List<Fence>> fencesWithSameX = fenceList.stream()
+															 .collect(Collectors.groupingBy(Fence::x));
+
+		int horizontalTopLinesCount = 0;
+		for (Map.Entry<Integer, List<Fence>> entry : fencesWithSameX.entrySet()) {
+			final List<Fence> groupOfFences = entry.getValue();
+			groupOfFences.removeIf(fence -> plots[fence.x + 1][fence.y] != plotType);
+			groupOfFences.sort(Comparator.comparingInt(f -> f.y));
+			if (!groupOfFences.isEmpty()) {
+				horizontalTopLinesCount++;
+			}
+			for (int i = 0; i < groupOfFences.size() - 1; i++) {
+				if (groupOfFences.get(i).y + 1 != groupOfFences.get(i + 1).y) {
+					horizontalTopLinesCount++;
+				}
+			}
+		}
+
+		fencesWithSameX = fenceList.stream()
+								   .collect(Collectors.groupingBy(Fence::x));
+
+		int horizontalBottomLinesCount = 0;
+		for (Map.Entry<Integer, List<Fence>> entry : fencesWithSameX.entrySet()) {
+			final List<Fence> groupOfFences = entry.getValue();
+			groupOfFences.removeIf(fence -> plots[fence.x - 1][fence.y] != plotType);
+			groupOfFences.sort(Comparator.comparingInt(f -> f.y));
+			if (!groupOfFences.isEmpty()) {
+				horizontalBottomLinesCount++;
+			}
+			for (int i = 0; i < groupOfFences.size() - 1; i++) {
+				if (groupOfFences.get(i).y + 1 != groupOfFences.get(i + 1).y) {
+					horizontalBottomLinesCount++;
+				}
+			}
+		}
+
+		/////////////// VERTICAL ////////////////////
+
+		Map<Integer, List<Fence>> fencesWithSameY = fenceList.stream()
+															 .collect(Collectors.groupingBy(Fence::y));
+
+		int verticalLeftLinesCount = 0;
+		for (Map.Entry<Integer, List<Fence>> entry : fencesWithSameY.entrySet()) {
+			final List<Fence> groupOfFences = entry.getValue();
+			groupOfFences.removeIf(fence -> plots[fence.x][fence.y + 1] != plotType);
+			groupOfFences.sort(Comparator.comparingInt(f -> f.x));
+			if (!groupOfFences.isEmpty()) {
+				verticalLeftLinesCount++;
+			}
+			for (int i = 0; i < groupOfFences.size() - 1; i++) {
+				if (groupOfFences.get(i).x + 1 != groupOfFences.get(i + 1).x) {
+					verticalLeftLinesCount++;
+				}
+			}
+		}
+
+		fencesWithSameY = fenceList.stream()
+								   .collect(Collectors.groupingBy(Fence::y));
+
+		int verticalRightLinesCount = 0;
+		for (Map.Entry<Integer, List<Fence>> entry : fencesWithSameY.entrySet()) {
+			final List<Fence> groupOfFences = entry.getValue();
+			groupOfFences.removeIf(fence -> plots[fence.x][fence.y - 1] != plotType);
+			groupOfFences.sort(Comparator.comparingInt(f -> f.x));
+			if (!groupOfFences.isEmpty()) {
+				verticalRightLinesCount++;
+			}
+			for (int i = 0; i < groupOfFences.size() - 1; i++) {
+				if (groupOfFences.get(i).x + 1 != groupOfFences.get(i + 1).x) {
+					verticalRightLinesCount++;
+				}
+			}
+		}
+
+		final int sum = horizontalTopLinesCount + horizontalBottomLinesCount +
+					  verticalLeftLinesCount + verticalRightLinesCount;
+		return sum;
+	}
+
+	private static int followFences(Fence start, char[][] plots) {
 		int x = start.x;
 		int y = start.y;
 		int corners = 0;
@@ -147,7 +242,7 @@ public class SolutionPart2 {
 			}
 			if (isInsideMap(x + 1, y, plots) && plots[x + 1][y] != 0) {
 				corners++;
-//				System.out.println();
+				//				System.out.println();
 				while (plots[x + 1][y] != 0) {
 					System.out.println(plots[x + 1][y] + " ");
 					x++;
@@ -155,7 +250,7 @@ public class SolutionPart2 {
 			}
 			if (isInsideMap(x, y - 1, plots) && plots[x][y - 1] != 0) {
 				corners++;
-//				System.out.println();
+				//				System.out.println();
 				while (plots[x][y - 1] != 0) {
 					System.out.println(plots[x][y - 1] + " ");
 					y--;
@@ -163,7 +258,7 @@ public class SolutionPart2 {
 			}
 			if (isInsideMap(x - 1, y, plots) && plots[x - 1][y] != 0) {
 				corners++;
-//				System.out.println();
+				//				System.out.println();
 				while (plots[x - 1][y] != 0) {
 					System.out.println(plots[x - 1][y] + " ");
 					x--;
@@ -173,8 +268,8 @@ public class SolutionPart2 {
 		return corners;
 	}
 
-	private static int[][] findFences(char plotId, char[][] plots) {
-		final int[][] fences = initFences(plots);
+	private static char[][] findFences(char plotId, char[][] plots) {
+		final char[][] fences = initFences(plots);
 
 		for (int x = 0; x < plots.length; x++) {
 			for (int y = 0; y < plots[0].length; y++) {
@@ -183,29 +278,37 @@ public class SolutionPart2 {
 				//				}
 				if (plots[x][y] == plotId) {
 					if (plots[x + 1][y] != plotId) {
-						fences[x + 1][y]++;
+						//						fences[x + 1][y]++;
+						fences[x + 1][y] = '#';
 					}
 					if (plots[x - 1][y] != plotId) {
-						fences[x - 1][y]++;
+						//						fences[x - 1][y]++;
+						fences[x - 1][y] = '#';
 					}
 					if (plots[x][y + 1] != plotId) {
-						fences[x][y + 1]++;
+						//						fences[x][y + 1]++;
+						fences[x][y + 1] = '#';
 					}
 					if (plots[x][y - 1] != plotId) {
-						fences[x][y - 1]++;
+						//						fences[x][y - 1]++;
+						fences[x][y - 1] = '#';
 					}
 
 					if (plots[x + 1][y + 1] != plotId) {
-						fences[x + 1][y + 1]++;
+						//						fences[x + 1][y + 1]++;
+						fences[x + 1][y + 1] = '#';
 					}
 					if (plots[x + 1][y - 1] != plotId) {
-						fences[x + 1][y - 1]++;
+						//						fences[x + 1][y - 1]++;
+						fences[x + 1][y - 1] = '#';
 					}
 					if (plots[x - 1][y + 1] != plotId) {
-						fences[x - 1][y + 1]++;
+						//						fences[x - 1][y + 1]++;
+						fences[x - 1][y + 1] = '#';
 					}
 					if (plots[x - 1][y - 1] != plotId) {
-						fences[x - 1][y - 1]++;
+						//						fences[x - 1][y - 1]++;
+						fences[x - 1][y - 1] = '#';
 					}
 				}
 			}
@@ -213,12 +316,12 @@ public class SolutionPart2 {
 		return fences;
 	}
 
-	private static int[][] initFences(char[][] garden) {
-		int[][] fences = new int[garden.length][garden[0].length];
+	private static char[][] initFences(char[][] garden) {
+		char[][] fences = new char[garden.length][garden[0].length];
 
 		for (int x = 0; x < fences.length; x++) {
 			for (int y = 0; y < fences[0].length; y++) {
-				fences[x][y] = 0;
+				fences[x][y] = '.';
 			}
 		}
 		return fences;
