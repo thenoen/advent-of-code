@@ -328,25 +328,29 @@ public class SolutionPart2 {
 	}
 
 	private static void print(String title, char[][] plots) {
-		System.out.println(title + ":");
+		StringBuilder sb = new StringBuilder();
+		sb.append(title + ":\n");
 		for (int x = 0; x < plots.length; x++) {
 			for (int y = 0; y < plots[0].length; y++) {
-				System.out.print(plots[x][y]);
+				sb.append(plots[x][y]);
 			}
-			System.out.println();
+			sb.append("\n");
 		}
-		System.out.println();
+		sb.append("\n");
+		System.out.print(sb);
 	}
 
 	private static void print(String title, int[][] plots) {
-		System.out.println(title + ":");
+		StringBuilder sb = new StringBuilder();
+		sb.append(title + ":\n");
 		for (int x = 0; x < plots.length; x++) {
 			for (int y = 0; y < plots[0].length; y++) {
-				System.out.print(plots[x][y]);
+				sb.append(plots[x][y]);
 			}
-			System.out.println();
+			sb.append("\n");
 		}
-		System.out.println();
+		sb.append("\n");
+		System.out.print(sb);
 	}
 
 	private void filterRegions(char[][] garden, char[][] plots, char plantType) {
