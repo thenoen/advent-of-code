@@ -85,37 +85,9 @@ public class Solution {
 
 	private long solveProblem2(Problem problem) {
 
-		int minPrice = Integer.MAX_VALUE;
-
 		final Location buttonA = problem.buttonA;
 		final Location buttonB = problem.buttonB;
 		final Location prize = problem.prize;
-		final long lcmABx = lcm(buttonA.x, buttonB.x);
-		final long remainderX = prize.x % lcmABx;
-		final long lcmXcount = (prize.x - remainderX) / lcmABx;
-		final long baseX = prize.x - remainderX;
-		final long ratioAx = lcmABx / buttonA.x;
-		final long ratioBx = lcmABx / buttonB.x;
-
-		final long lcmABy = lcm(buttonA.y, buttonB.y);
-		final long remainderY = prize.y % lcmABy;
-		final long lcmYcount = (prize.y - remainderY) / lcmABy;
-		final long baseY = prize.y - remainderY;
-		final long ratioAy = lcmABy / buttonA.y;
-		final long ratioBy = lcmABy / buttonB.y;
-
-		long maxA = remainderX / buttonA.x;
-		long maxB = remainderX / buttonB.x;
-
-		final long aStepY = buttonA.y * ratioAx;
-		final long bStepY = buttonB.y * ratioBx;
-		final long lcmStepY = lcm(aStepY, bStepY);
-		final long remainderStepY = prize.y % lcmStepY;
-
-		long aDivident = prize.y - buttonB.y * prize.x;
-		long aDivisor = buttonA.y * buttonB.x - buttonA.x * buttonB.y;
-		long test = aDivident % aDivisor;
-		long aDivision = aDivident / aDivisor;
 
 		long bDivident = buttonA.x * prize.y - buttonA.y * prize.x;
 		long bDivisor = buttonA.x * buttonB.y - buttonA.y * buttonB.x;
