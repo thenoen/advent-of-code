@@ -33,6 +33,9 @@ public class Solution {
 	}
 
 	public long solvePart2(String inputPath) {
+
+		//		final long gcd1 = gcd(48, 18);
+		//		final long gcd2 = gcd(18, 48);
 		final ArrayList<String> lines = Utils.loadLines(inputPath);
 		final Pattern buttonPattern = Pattern.compile(BUTTON_REGEX);
 		final Pattern prizePattern = Pattern.compile(PRIZE_REGEX);
@@ -45,6 +48,8 @@ public class Solution {
 			final long price = solveProblem2(problems.get(i));
 			if (price > 0) {
 				System.out.println("price: " + price);
+			} else {
+				System.out.println("no solution");
 			}
 			totalPrice += price;
 			System.out.println();
@@ -81,28 +86,50 @@ public class Solution {
 	private long solveProblem2(Problem problem) {
 
 		int minPrice = Integer.MAX_VALUE;
-		boolean hasSolution = false;
 
-		long maxA = problem.prize.x / problem.buttonA.x;
-		long maxB = problem.prize.x / problem.buttonB.y;
+		final Location buttonA = problem.buttonA;
+		final Location buttonB = problem.buttonB;
+		final Location prize = problem.prize;
+		final long lcmABx = lcm(buttonA.x, buttonB.x);
+		final long remainderX = prize.x % lcmABx;
+		final long lcmXcount = (prize.x - remainderX) / lcmABx;
+		final long baseX = prize.x - remainderX;
+		final long ratioAx = lcmABx / buttonA.x;
+		final long ratioBx = lcmABx / buttonB.x;
 
-		for (int a = 0; a < maxA; a++) {
-			for (int b = 0; b < maxB; b++) {
+		final long lcmABy = lcm(buttonA.y, buttonB.y);
+		final long remainderY = prize.y % lcmABy;
+		final long lcmYcount = (prize.y - remainderY) / lcmABy;
+		final long baseY = prize.y - remainderY;
+		final long ratioAy = lcmABy / buttonA.y;
+		final long ratioBy = lcmABy / buttonB.y;
 
-				if (a * problem.buttonA.x + b * problem.buttonB.x == problem.prize.x &&
-					a * problem.buttonA.y + b * problem.buttonB.y == problem.prize.y) {
-					//					System.out.println("a: " + a + " b: " + b);
-					hasSolution = true;
-					int price = a * A_COST + b * B_COST;
-					if (price < minPrice) {
-						minPrice = price;
-					}
-				}
-			}
+		long maxA = remainderX / buttonA.x;
+		long maxB = remainderX / buttonB.x;
+
+		final long aStepY = buttonA.y * ratioAx;
+		final long bStepY = buttonB.y * ratioBx;
+		final long lcmStepY = lcm(aStepY, bStepY);
+		final long remainderStepY = prize.y % lcmStepY;
+
+		long aDivident = prize.y - buttonB.y * prize.x;
+		long aDivisor = buttonA.y * buttonB.x - buttonA.x * buttonB.y;
+		long test = aDivident % aDivisor;
+		long aDivision = aDivident / aDivisor;
+
+		long bDivident = buttonA.x * prize.y - buttonA.y * prize.x;
+		long bDivisor = buttonA.x * buttonB.y - buttonA.y * buttonB.x;
+		long test2 = bDivident % bDivisor;
+		long bDivision = bDivident / bDivisor;
+
+		long aCalcTest = (prize.x - bDivision* buttonB.x) % buttonA.x;
+		long aCalc = (prize.x - bDivision* buttonB.x) / buttonA.x;
+
+		if(test2 == 0 && aCalcTest == 0) {
+			long priceCalc = aCalc * A_COST + bDivision * B_COST;
+			return priceCalc;
 		}
-		if (hasSolution) {
-			return minPrice;
-		}
+
 		return 0;
 	}
 
@@ -131,10 +158,10 @@ public class Solution {
 			prizeMatcher.find();
 			final String prizeX = prizeMatcher.group(1);
 			final String prizeY = prizeMatcher.group(2);
-			Location prize = new Location(Long.parseLong(prizeX)+ conversionError,
-										  Long.parseLong(prizeY)+ conversionError);
+			Location prize = new Location(Long.parseLong(prizeX) + conversionError,
+										  Long.parseLong(prizeY) + conversionError);
 
-			System.out.println();
+//			System.out.println();
 			i++;
 			Problem problem = new Problem(buttonA, buttonB, prize);
 			problems.add(problem);
@@ -148,6 +175,17 @@ public class Solution {
 
 	private record Location(long x, long y) {
 
+	}
+
+	private long gcd(long a, long b) {
+		if (b == 0) {
+			return a;
+		}
+		return gcd(b, a % b);
+	}
+
+	private long lcm(long a, long b) {
+		return a * b / gcd(a, b);
 	}
 
 }
