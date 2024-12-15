@@ -2,17 +2,16 @@ package sk.thenoen.aoc2024.day14;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import sk.thenoen.aoc.Utils;
 
-public class Solution {
+public class SolutionPart2 {
 
 	private static final String ROBOT_REGEX = "p=*(.*?),(.*?)\sv=(.*?),(.*)";
 
-	public int solvePart1(String inputPath, int width, int height, int seconds) {
+	public int solve(String inputPath, int width, int height, int seconds) {
 		final ArrayList<String> lines = Utils.loadLines(inputPath);
 
 		List<Robot>[][] floor = new ArrayList[width][height];
@@ -57,66 +56,36 @@ public class Solution {
 				}
 			}
 
-			cleanFloor(floor);
-			positionRobots(floor, robots);
-			System.out.println("second: " + i);
-			printFloor(floor);
-		}
-
-		System.out.println("=============================");
-		int halfWidth = width / 2;
-		int halfHeight = height / 2;
-
-		// I. quadrant
-		int robots1 = 0;
-		for (int x = 0; x < halfHeight; x++) {
-			for (int y = 0; y < halfWidth; y++) {
-				robots1 += floor[y][x].size();
-				System.out.print(floor[y][x].size() + " ");
+			int robotCount = 0;
+			for (int x = 0; x < 20; x++) {
+				for (int y = 0; y < 20; y++) {
+					robotCount += floor[y][x].size();
+				}
 			}
-			System.out.println();
-		}
-		System.out.println();
 
-		// II. quadrant
-		int robots2 = 0;
-		for (int x = 0; x < halfHeight; x++) {
-			for (int y = halfWidth + 1; y < width; y++) {
-				robots2 += floor[y][x].size();
-				System.out.print(floor[y][x].size() + " ");
+//			System.out.println("second: " + i);
+			if (robotCount < 10) {
+				cleanFloor(floor);
+				positionRobots(floor, robots);
+				printFloor(floor);
+				System.out.println("second: " + i);
+				sleep(200);
 			}
-			System.out.println();
+
+
+
 		}
-		System.out.println();
 
-		// III. quadrant
-		int robots3 = 0;
-		for (int x = halfHeight + 1; x < height; x++) {
-			for (int y = 0; y < halfWidth; y++) {
-				robots3 += floor[y][x].size();
-				System.out.print(floor[y][x].size() + " ");
-			}
-			System.out.println();
+
+		return 0;
+	}
+
+	private static void sleep(int i) {
+		try {
+			Thread.sleep(i);
+		} catch (InterruptedException e) {
+			throw new RuntimeException(e);
 		}
-		System.out.println();
-
-		// IV. quadrant
-		int robots4 = 0;
-		for (int x = halfHeight + 1; x < height; x++) {
-			for (int y = halfWidth + 1; y < width; y++) {
-				robots4 += floor[y][x].size();
-				System.out.print(floor[y][x].size() + " ");
-			}
-			System.out.println();
-		}
-		System.out.println();
-
-		System.out.println("robots1: " + robots1);
-		System.out.println("robots2: " + robots2);
-		System.out.println("robots3: " + robots3);
-		System.out.println("robots4: " + robots4);
-
-		return robots1 * robots2 * robots3 * robots4;
 	}
 
 	private void printFloor(List<Robot>[][] floor) {
@@ -124,13 +93,19 @@ public class Solution {
 		for (int x = 0; x < floor[0].length; x++) {
 			for (int y = 0; y < floor.length; y++) {
 				if (floor[y][x].isEmpty()) {
-					stringBuilder.append(". ");
+//					System.out.print(". ");
+					stringBuilder.append(" ");
 				} else {
-					stringBuilder.append(floor[y][x].size() + " ");
+//					System.out.print(floor[y][x].size() + " ");
+//					System.out.print(floor[y][x].size() );
+//					stringBuilder.append(floor[y][x].size());
+					stringBuilder.append("*");
 				}
 			}
+//			System.out.println();
 			stringBuilder.append("\n");
 		}
+//		System.out.println();
 		System.out.println(stringBuilder);
 	}
 
