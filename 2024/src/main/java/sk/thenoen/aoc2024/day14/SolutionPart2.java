@@ -37,11 +37,11 @@ public class SolutionPart2 {
 			floor[pX][pY].add(robot);
 			robots.add(robot);
 		}
-		printFloor(floor);
+//		printFloor(floor);
 
-		cleanFloor(floor);
-		positionRobots(floor, robots);
-		printFloor(floor);
+//		cleanFloor(floor);
+//		positionRobots(floor, robots);
+//		printFloor(floor);
 
 		for (int i = 1; i <= seconds; i++) {
 			for (Robot robot : robots) {
@@ -69,7 +69,7 @@ public class SolutionPart2 {
 				positionRobots(floor, robots);
 				printFloor(floor);
 				System.out.println("second: " + i);
-				sleep(200);
+//				sleep(200);
 			}
 
 

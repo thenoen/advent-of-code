@@ -28,7 +28,7 @@ class SolutionTest {
 		assertEquals(229069152, result);
 	}
 
-	@Disabled
+//	@Disabled
 	@Test
 	void solvePart2() {
 		SolutionPart2 solution = new SolutionPart2();
