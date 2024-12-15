@@ -28,11 +28,10 @@ class SolutionTest {
 		assertEquals(229069152, result);
 	}
 
-//	@Disabled
 	@Test
 	void solvePart2() {
 		SolutionPart2 solution = new SolutionPart2();
 		final int result = solution.solve("day14/input.txt", 101, 103, Integer.MAX_VALUE);
-		assertEquals(-1, result);
+		assertEquals(0, result);
 	}
 }

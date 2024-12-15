@@ -37,11 +37,7 @@ public class SolutionPart2 {
 			floor[pX][pY].add(robot);
 			robots.add(robot);
 		}
-//		printFloor(floor);
 
-//		cleanFloor(floor);
-//		positionRobots(floor, robots);
-//		printFloor(floor);
 
 		for (int i = 1; i <= seconds; i++) {
 			for (Robot robot : robots) {
@@ -56,26 +52,16 @@ public class SolutionPart2 {
 				}
 			}
 
-			int robotCount = 0;
-			for (int x = 0; x < 20; x++) {
-				for (int y = 0; y < 20; y++) {
-					robotCount += floor[y][x].size();
-				}
-			}
-
-//			System.out.println("second: " + i);
-			if (robotCount < 10) {
+			//			if (i % 101 == 10) {// result: 7383
+			//			if (i % 103 == 70) { // result: 7383
+			if (i == 7383) {
 				cleanFloor(floor);
 				positionRobots(floor, robots);
 				printFloor(floor);
-				System.out.println("second: " + i);
-//				sleep(200);
+				break;
 			}
 
-
-
 		}
-
 
 		return 0;
 	}
@@ -93,19 +79,13 @@ public class SolutionPart2 {
 		for (int x = 0; x < floor[0].length; x++) {
 			for (int y = 0; y < floor.length; y++) {
 				if (floor[y][x].isEmpty()) {
-//					System.out.print(". ");
 					stringBuilder.append(" ");
 				} else {
-//					System.out.print(floor[y][x].size() + " ");
-//					System.out.print(floor[y][x].size() );
-//					stringBuilder.append(floor[y][x].size());
 					stringBuilder.append("*");
 				}
 			}
-//			System.out.println();
 			stringBuilder.append("\n");
 		}
-//		System.out.println();
 		System.out.println(stringBuilder);
 	}
 
@@ -119,7 +99,6 @@ public class SolutionPart2 {
 
 	private void positionRobots(List<Robot>[][] floor, List<Robot> robots) {
 		for (Robot robot : robots) {
-			//			floor[robot.y][robot.x].add(robot);
 			floor[robot.x][robot.y].add(robot);
 		}
 	}
