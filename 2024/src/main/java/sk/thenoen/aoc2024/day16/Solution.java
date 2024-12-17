@@ -131,18 +131,6 @@ public class Solution {
 		System.out.println(sb);
 	}
 
-	//	private static void print(char[][] maze, List<Traveller> travellers) {
-	//		StringBuilder sb = new StringBuilder();
-	//		for (int x = 0; x < maze.length; x++) {
-	//			for (int y = 0; y < maze[x].length; y++) {
-	//				sb.append(maze[x][y]);
-	//			}
-	//			sb.append("\n");
-	//		}
-	//		sb.append("\n");
-	//		System.out.println(sb);
-	//	}
-
 	private record Position(int x, int y) {
 
 		@Override

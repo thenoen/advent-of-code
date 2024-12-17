@@ -54,7 +54,7 @@ public class SolutionPart2Graph {
 		int emptyNodesCount = 0;
 		for (int x = 0; x < graph.length; x++) {
 			for (int y = 0; y < graph[0].length; y++) {
-				if(graph[x][y].type == Type.EMPTY) {
+				if (graph[x][y].type == Type.EMPTY) {
 					emptyNodesCount++;
 				}
 			}
@@ -62,28 +62,34 @@ public class SolutionPart2Graph {
 
 		List<Position> potentialObstacles = new ArrayList<>();
 
-		for (int x = 0; x < graph.length; x++) {
-			for (int y = 0; y < graph[0].length; y++) {
+		final List<Node> possibleObstacles = findPath(startNode, graph);
 
-				startNode.getPathDirections().add(Direction.UP);
-				startNode.currentDirection = Direction.UP;
+		for (Node possibleObstacle : possibleObstacles) {
 
-				Node testedNode = graph[x][y];
-				if (testedNode.type == Type.EMPTY) {nodeTests++;
-					System.out.println("nodeTests: " + nodeTests + " / " + emptyNodesCount);
-					testedNode.type = Type.WALL;
-					if (testGraph(startNode, graph)) {
-						potentialObstacles.add(new Position(x, y));
-					}
-					testedNode.type = Type.EMPTY;
-					cleanMap(graph);
-//					System.out.println("-----------------------\n");
+			//		}
+			//		for (int x = 0; x < graph.length; x++) {
+			//			for (int y = 0; y < graph[0].length; y++) {
+
+			startNode.getPathDirections().add(Direction.UP);
+			startNode.currentDirection = Direction.UP;
+
+			Node testedNode = possibleObstacle;
+			if (testedNode.type == Type.EMPTY) {
+				nodeTests++;
+				System.out.println("nodeTests: " + nodeTests + " / " + possibleObstacles.size());
+				testedNode.type = Type.WALL;
+				if (containsLoop(startNode, graph)) {
+					potentialObstacles.add(testedNode.position);
 				}
+				testedNode.type = Type.EMPTY;
+				cleanMap(graph);
+				//					System.out.println("-----------------------\n");
 			}
 		}
+		//		}
 
-//		printMap(map);
-//		printMap(directionMap);
+		//		printMap(map);
+		//		printMap(directionMap);
 
 		final HashSet<Position> uniqueObstacles = new HashSet<>(potentialObstacles);
 		uniqueObstacles.forEach(obstacle -> map[obstacle.x][obstacle.y] = '■');
@@ -94,7 +100,7 @@ public class SolutionPart2Graph {
 		return uniqueObstacles.size();
 	}
 
-	private boolean testGraph(Node currentNode, Node[][] graph) throws InterruptedException {
+	private boolean containsLoop(Node currentNode, Node[][] graph) throws InterruptedException {
 
 		List<Node> path = new ArrayList<>();
 		path.add(currentNode);
@@ -111,10 +117,25 @@ public class SolutionPart2Graph {
 
 			currentNode = newNode;
 			path.add(currentNode);
-//			printMap(graph);
-//			Thread.sleep(200);
+			//			printMap(graph);
+			//			Thread.sleep(200);
 		}
 		return false;
+	}
+
+	private List<Node> findPath(Node currentNode, Node[][] graph) throws InterruptedException {
+
+		List<Node> path = new ArrayList<>();
+		path.add(currentNode);
+
+		while (currentNode != null && isInsideGraph(currentNode, graph)) {
+			Node newNode = advance(currentNode, graph);
+			currentNode = newNode;
+			path.add(currentNode);
+		}
+		path.removeFirst();
+		path.removeLast();
+		return path;
 	}
 
 	private Node advance(Node currentNode, Node[][] graph) {
